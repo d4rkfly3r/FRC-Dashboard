@@ -29,6 +29,7 @@ import com.github.d4rkfly3r.frc.dashboard.api.events.Event;
 import com.github.d4rkfly3r.frc.dashboard.api.events.PluginInitEvent;
 import com.github.d4rkfly3r.frc.dashboard.api.util.Logger;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -56,15 +57,17 @@ public class PluginBus {
         plugins = new HashMap<>();
     }
 
-    public void fireEvent(Event event) {
+    @Nonnull
+    public PluginBus fireEvent(@Nonnull Event event) {
         plugins.forEach((aClass, instance) -> {
             List<Method> methods = new ArrayList<>();
             Collections.addAll(methods, aClass.getDeclaredMethods());
             invokeMethods(instance, methods, event);
         });
+        return this;
     }
 
-    private void invokeMethods(Object instance, List<Method> methods, Event event) {
+    private void invokeMethods(@Nonnull Object instance, @Nonnull List<Method> methods, @Nonnull Event event) {
         methods.stream().forEach(method -> {
             if (method.isAnnotationPresent(Listener.class)) {
                 if (method.getParameterCount() > 0) {
@@ -80,10 +83,12 @@ public class PluginBus {
         });
     }
 
-    public void fireEventToObject(Object instance, Event event) {
+    @Nonnull
+    public PluginBus fireEventToObject(@Nonnull Object instance, @Nonnull Event event) {
         List<Method> methods = new ArrayList<>();
         Collections.addAll(methods, instance.getClass().getDeclaredMethods());
         invokeMethods(instance, methods, event);
+        return this;
     }
 
     public void init() {

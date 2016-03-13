@@ -1,2 +1,3 @@
 rootProject.name = 'FRC-Dashboard-Server'
 
+include 'FRC-Dashboard-API'

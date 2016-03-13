@@ -1,5 +1,6 @@
 package com.github.d4rkfly3r.frc.dashboard.server;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,6 +13,7 @@ public class MainGUI extends JFrame {
 
     private static MainGUI ourInstance = new MainGUI();
 
+    @Nonnull
     public static MainGUI getInstance() {
         return ourInstance;
     }
@@ -24,6 +26,7 @@ public class MainGUI extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
+    @Nonnull
     public MainGUI lockWindow() {
         this.setVisible(false);
         this.setAlwaysOnTop(true);
@@ -32,6 +35,7 @@ public class MainGUI extends JFrame {
         return this;
     }
 
+    @Nonnull
     public MainGUI unlockWindow() {
         this.setVisible(false);
         this.setAlwaysOnTop(false);
@@ -40,6 +44,7 @@ public class MainGUI extends JFrame {
         return this;
     }
 
+    @Nonnull
     public MainGUI setup() {
 //        PluginBus.getInstance().fireEvent(new Packet99(PluginBus.getInstance().plugins));
         return this;

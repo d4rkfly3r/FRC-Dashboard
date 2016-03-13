@@ -1,6 +1,6 @@
 package com.github.d4rkfly3r.frc.dashboard.server;
 
-import com.github.d4rkfly3r.frc.dashboard.api.packets.Packet;
+import com.github.d4rkfly3r.frc.dashboard.api.events.Event;
 import com.github.d4rkfly3r.frc.dashboard.api.util.Logger;
 
 import java.io.EOFException;
@@ -16,8 +16,6 @@ import java.net.SocketException;
  */
 public class MainServer {
 
-    private MainGUI mainGUI = MainGUI.getInstance();
-
     public MainServer() {
         Logger logger = new Logger();
         PluginBus.getInstance().init();
@@ -26,7 +24,7 @@ public class MainServer {
         try {
             ServerSocket serverSocket = new ServerSocket(7093, 3);
             Socket client;
-            mainGUI.setup();
+            MainGUI.getInstance().setup();
 
             while (!serverSocket.isClosed()) {
                 client = serverSocket.accept();
@@ -34,8 +32,8 @@ public class MainServer {
                     while (client.isConnected()) {
                         try {
                             Object unknown = objectInputStream.readObject();
-                            if (unknown instanceof Packet<?, ?>) {
-                                PluginBus.getInstance().fireEvent((Packet) unknown);
+                            if (unknown instanceof Event) {
+                                PluginBus.getInstance().fireEvent((Event) unknown);
                             }
                         } catch (EOFException ignored) {
                             logger.debugError(ignored.getMessage());

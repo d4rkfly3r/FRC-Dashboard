@@ -27,6 +27,8 @@ package com.github.d4rkfly3r.frc.dashboard.server;
 import com.github.d4rkfly3r.frc.dashboard.api.Module;
 import com.github.d4rkfly3r.frc.dashboard.api.Plugin;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.net.JarURLConnection;
@@ -42,27 +44,32 @@ import java.util.stream.Collectors;
  * Project: FRC-Dashboard-Server
  */
 class ClassFinder {
+
+    @Nonnull
     static Vector<Class<?>> getPluginClasses() {
         return findSubclasses(Plugin.class, getClasspathLocations());
     }
 
+    @Nonnull
     static Vector<Class<?>> getModuleClasses() {
         return findSubclasses(Module.class, getClasspathLocations());
     }
 
-    private static Vector<Class<?>> findSubclasses(Class<?> annotationClass, Map<URL, String> locations) {
+    @Nonnull
+    private static Vector<Class<?>> findSubclasses(@Nonnull Class<?> annotationClass, @Nonnull Map<URL, String> locations) {
         Vector<Class<?>> v = new Vector<>();
         Vector<Class<?>> w;
 
         for (URL url : locations.keySet()) {
             w = findSubclasses(url, locations.get(url), annotationClass);
-            if (w != null && (w.size() > 0)) v.addAll(w);
+            if ((w.size() > 0)) v.addAll(w);
         }
 
         return v;
     }
 
-    private static Vector<Class<?>> findSubclasses(URL location, String packageName, Class<?> annotationClass) {
+    @Nonnull
+    private static Vector<Class<?>> findSubclasses(@Nonnull URL location, @Nonnull String packageName, @Nonnull Class<?> annotationClass) {
 
         if (location.getFile().contains("/jre/lib/") || location.getFile().contains("idea_rt.jar"))
             return new Vector<>();
@@ -135,6 +142,7 @@ class ClassFinder {
         return v;
     }
 
+    @Nonnull
     private static Map<URL, String> getClasspathLocations() {
         Map<URL, String> map = new TreeMap<>((u1, u2) -> String.valueOf(u1).compareTo(String.valueOf(u2)));
         File file;
@@ -152,7 +160,7 @@ class ClassFinder {
         return map;
     }
 
-    private static void include(String name, File file, Map<URL, String> map) {
+    private static void include(@Nullable String name, @Nonnull File file, @Nonnull Map<URL, String> map) {
         if (!file.exists()) return;
         if (!file.isDirectory()) {
             includeJar(file, map);
@@ -176,7 +184,7 @@ class ClassFinder {
         }
     }
 
-    private static void includeJar(File file, Map<URL, String> map) {
+    private static void includeJar(@Nonnull File file, @Nonnull Map<URL, String> map) {
         if (file.isDirectory()) return;
 
         URL jarURL;
@@ -209,7 +217,8 @@ class ClassFinder {
         }
     }
 
-    private static String packageNameFor(JarEntry entry) {
+    @Nonnull
+    private static String packageNameFor(@Nullable JarEntry entry) {
         if (entry == null) return "";
         String s = entry.getName();
         if (s == null) return "";

@@ -27,6 +27,7 @@ package com.github.d4rkfly3r.frc.dashboard.server;
 import com.github.d4rkfly3r.frc.dashboard.api.Inject;
 import com.github.d4rkfly3r.frc.dashboard.api.util.Logger;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -37,14 +38,16 @@ import java.util.List;
  * Created by d4rkfly3r on 3/13/2016.
  * Project: FRC-Dashboard-Server
  */
-public class Injector {
+class Injector {
     private Logger logger = new Logger(Injector.class);
 
     private static Injector ourInstance = new Injector();
+
     private ArrayList<Class<?>> nonUniqueFields = new ArrayList<Class<?>>() {{
         add(MainGUI.class);
     }};
 
+    @Nonnull
     public static Injector getInstance() {
         return ourInstance;
     }
@@ -52,7 +55,8 @@ public class Injector {
     private Injector() {
     }
 
-    public <T> Injector inject(T t) {
+    @Nonnull
+    public <T> Injector inject(@Nonnull T t) {
         PluginBus.getInstance().plugins.forEach((aClass, o) -> {
             List<Field> fields = new ArrayList<>();
             Collections.addAll(fields, aClass.getDeclaredFields());
@@ -76,7 +80,8 @@ public class Injector {
         return this;
     }
 
-    public Injector inject(Class<?> t) {
+    @Nonnull
+    public Injector inject(@Nonnull Class<?> t) {
         PluginBus.getInstance().plugins.forEach((aClass, o) -> {
             List<Field> fields = new ArrayList<>();
             Collections.addAll(fields, aClass.getDeclaredFields());
