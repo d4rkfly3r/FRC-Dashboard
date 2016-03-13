@@ -1,0 +1,19 @@
+group 'com.github.d4rkfly3r'
+version '0.1-SNAPSHOT'
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.11'
+  distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}

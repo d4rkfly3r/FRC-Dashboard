@@ -1,0 +1,3 @@
+[submodule "FRC-Dashboard-API"]
+	path = FRC-Dashboard-API
+	url = https://github.com/d4rkfly3r/FRC-Dashboard-API.git
