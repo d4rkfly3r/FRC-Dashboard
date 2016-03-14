@@ -4,9 +4,10 @@ import com.github.d4rkfly3r.frc.dashboard.api.Inject;
 import com.github.d4rkfly3r.frc.dashboard.api.Listener;
 import com.github.d4rkfly3r.frc.dashboard.api.Plugin;
 import com.github.d4rkfly3r.frc.dashboard.api.events.PluginInitEvent;
+import com.github.d4rkfly3r.frc.dashboard.api.util.DragListener;
 import com.github.d4rkfly3r.frc.dashboard.api.util.Logger;
 import com.github.d4rkfly3r.frc.dashboard.server.MainGUI;
-import com.github.d4rkfly3r.frc.dashboard.server.modules.ProgressModule;
+import com.github.d4rkfly3r.frc.dashboard.server.modules.HorizontalProgressModule;
 
 /**
  * Created by Joshua on 3/14/2016.
@@ -16,7 +17,7 @@ import com.github.d4rkfly3r.frc.dashboard.server.modules.ProgressModule;
 public class DefaultPlugin {
 
     @Inject
-    ProgressModule progressModule;
+    HorizontalProgressModule horizontalProgressModule;
 
     @Inject
     Logger logger;
@@ -26,9 +27,14 @@ public class DefaultPlugin {
 
     @Listener
     public void onInit(PluginInitEvent event) {
+        DragListener dragListener = new DragListener();
+        horizontalProgressModule.addMouseMotionListener(dragListener);
+        horizontalProgressModule.addMouseListener(dragListener);
+        horizontalProgressModule.addMouseWheelListener(e -> horizontalProgressModule.setValue(horizontalProgressModule.getValue() + (e.getWheelRotation())));
+
         logger.debug("Success");
-        progressModule.setLocation(5, 5);
-        mainGUI.add(progressModule);
-        progressModule.repaint();
+        horizontalProgressModule.setLocation(5, 5);
+        mainGUI.add(horizontalProgressModule);
+        horizontalProgressModule.repaint();
     }
 }

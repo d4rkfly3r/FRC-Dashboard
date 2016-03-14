@@ -71,4 +71,8 @@ public class MainServer {
     public static boolean isRunning() {
         return running;
     }
+
+    public static void main(String[] args) {
+        new MainServer();
+    }
 }

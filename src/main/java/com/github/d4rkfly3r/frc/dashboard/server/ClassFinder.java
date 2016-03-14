@@ -26,6 +26,7 @@ package com.github.d4rkfly3r.frc.dashboard.server;
 
 import com.github.d4rkfly3r.frc.dashboard.api.Module;
 import com.github.d4rkfly3r.frc.dashboard.api.Plugin;
+import com.github.d4rkfly3r.frc.dashboard.api.util.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,6 +45,13 @@ import java.util.stream.Collectors;
  * Project: FRC-Dashboard-Server
  */
 class ClassFinder {
+
+    private static Logger logger = new Logger(ClassFinder.class);
+    private static ArrayList<String> excludedLocations = new ArrayList<String>() {{
+        add("/jre/lib/");
+        add("idea_rt.jar");
+        add("xalan-2.6.0.jar");
+    }};
 
     @Nonnull
     static Vector<Class<?>> getPluginClasses() {
@@ -71,8 +79,14 @@ class ClassFinder {
     @Nonnull
     private static Vector<Class<?>> findSubclasses(@Nonnull URL location, @Nonnull String packageName, @Nonnull Class<?> annotationClass) {
 
-        if (location.getFile().contains("/jre/lib/") || location.getFile().contains("idea_rt.jar"))
+        if (location.getFile().contains("/jre/lib/") || location.getFile().contains("idea_rt.jar") || location.getFile().contains("xalan-2.6.0.jar"))
             return new Vector<>();
+
+        for (String excludedLocation : excludedLocations) {
+            if (location.getFile().contains(excludedLocation)) {
+                return new Vector<>();
+            }
+        }
 
         Map<Class<?>, URL> thisResult = new TreeMap<>((c1, c2) -> String.valueOf(c1).compareTo(String.valueOf(c2)));
         Vector<Class<?>> v = new Vector<>();
