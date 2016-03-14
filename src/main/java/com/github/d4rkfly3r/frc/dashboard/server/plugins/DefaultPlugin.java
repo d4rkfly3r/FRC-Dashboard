@@ -36,5 +36,7 @@ public class DefaultPlugin {
         horizontalProgressModule.setLocation(5, 5);
         mainGUI.add(horizontalProgressModule);
         horizontalProgressModule.repaint();
+
     }
+
 }

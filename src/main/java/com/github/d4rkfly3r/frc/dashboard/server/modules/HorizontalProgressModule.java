@@ -1,6 +1,7 @@
 package com.github.d4rkfly3r.frc.dashboard.server.modules;
 
 import com.github.d4rkfly3r.frc.dashboard.api.Module;
+import com.github.d4rkfly3r.frc.dashboard.server.Styles;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,11 @@ public class HorizontalProgressModule extends JProgressBar {
 
     private static final String DISABLED_PERCENT_STRING = " --- ";
 
-    private Color progressBarColor = new Color(0x1869A6);
+    {
+        System.out.println(Styles.getOrDef(".lols|color2", 0x1869A6));
+    }
+
+    private Color progressBarColor = new Color(Integer.decode(Styles.getOrDef(".lols|color", 0x1869A6)));
     private Color gradientEndingColor = new Color(0xc0c0c0);
     private Color borderColor = new Color(0x736a60);
     private Color disabledBorderColor = new Color(0xbebebe);

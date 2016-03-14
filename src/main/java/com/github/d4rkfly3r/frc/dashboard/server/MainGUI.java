@@ -46,8 +46,52 @@ public class MainGUI extends JFrame {
 
     @Nonnull
     public MainGUI setup() {
+//        applyStyles();
         this.setVisible(true);
         return this;
     }
+/*
+    private void applyStyles() {
+        Gson gson = new Gson();
+        Styles styles = gson.fromJson("{\"styles\":{\"progressBar\":{\"background-color\":\"orange\",\"color\":\"yeller\"}}}", Styles.class);
+        System.out.println(styles.styles);
+        getAllComponents(this).stream().filter(component -> styles.styles.containsKey(component.getName())).forEach(component -> {
+            System.out.println("Style Found");
+            styles.styles.get(component.getName()).forEach((s, s2) -> {
+                switch (s.toLowerCase()) {
+                    case "color":
+
+                        break;
+                }
+            });
+        });
+    }
+
+    @Nonnull
+    public static List<Component> getAllComponents(@Nonnull final Container c) {
+        Component[] comps = c.getComponents();
+        List<Component> compList = new ArrayList<>();
+        for (Component comp : comps) {
+            compList.add(comp);
+            if (comp instanceof Container) {
+                compList.addAll(getAllComponents((Container) comp));
+            }
+        }
+        return compList;
+    }
+
+
+    class Styles {
+
+        HashMap<String, HashMap<String, String>> styles = new HashMap<String, HashMap<String, String>>() {{
+            put(".lols", new HashMap<String, String>() {{
+                put("color", "red");
+                put("background-color", "blue");
+            }});
+        }};
+    }
+
+    */
+
 
 }
