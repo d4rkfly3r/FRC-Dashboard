@@ -26,7 +26,7 @@ package com.github.d4rkfly3r.frc.dashboard.server;
 
 import com.github.d4rkfly3r.frc.dashboard.api.Listener;
 import com.github.d4rkfly3r.frc.dashboard.api.events.Event;
-import com.github.d4rkfly3r.frc.dashboard.api.events.PluginInitEvent;
+import com.github.d4rkfly3r.frc.dashboard.api.events.PluginPreInitEvent;
 import com.github.d4rkfly3r.frc.dashboard.api.util.Logger;
 
 import javax.annotation.Nonnull;
@@ -43,7 +43,7 @@ import java.util.List;
  */
 public class PluginBus {
 
-    private Logger logger = new Logger();
+    private Logger logger = new Logger(PluginBus.class);
 
     private static PluginBus ourInstance = new PluginBus();
 
@@ -102,7 +102,7 @@ public class PluginBus {
         logger.log("Plugins: ");
         plugins.forEach((aClass, instance) -> {
             logger.log("\t" + aClass.getName());
-            fireEventToObject(instance, new PluginInitEvent());
+            fireEventToObject(instance, new PluginPreInitEvent());
         });
     }
 }

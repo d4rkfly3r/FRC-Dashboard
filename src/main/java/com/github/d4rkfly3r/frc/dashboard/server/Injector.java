@@ -71,7 +71,7 @@ class Injector {
                             } else {
                                 field.set(o, t);
                             }
-                            logger.debug(field.get(o));
+                            logger.debug("Injecting " + Logger.ANSI_GREEN + t.getClass().getName() + Logger.ANSI_RESET + " into field " + Logger.ANSI_GREEN + field.getDeclaringClass().getName() + ":" + field.getName());
                         } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | InstantiationException e) {
                             e.printStackTrace();
                         }

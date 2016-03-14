@@ -26,6 +26,7 @@ package com.github.d4rkfly3r.frc.dashboard.server;
 
 import com.github.d4rkfly3r.frc.dashboard.api.util.Logger;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 /**
@@ -34,7 +35,7 @@ import java.util.HashMap;
  */
 public class ModuleBus {
 
-    private Logger logger = new Logger();
+    private Logger logger = new Logger(ModuleBus.class);
 
     private static ModuleBus ourInstance = new ModuleBus();
 
@@ -51,12 +52,16 @@ public class ModuleBus {
     public void init() {
         ClassFinder.getModuleClasses().forEach(aClass1 -> {
             try {
+                for (Constructor<?> constructor : aClass1.getConstructors()) {
+                    constructor.setAccessible(true);
+                }
+
                 modules.put(aClass1, aClass1.newInstance());
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         });
-        logger.log("Plugins: ");
+        logger.log("Modules: ");
         modules.forEach((aClass, instance) -> logger.log("\t" + aClass.getName()));
     }
 }

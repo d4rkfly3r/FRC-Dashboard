@@ -9,7 +9,7 @@ import java.awt.*;
  * Project: FRC-Dashboard-Server
  */
 public class MainGUI extends JFrame {
-    private static final int SCALE = 400;
+    private static final int SCALE = 300;
 
     private static MainGUI ourInstance = new MainGUI();
 
@@ -22,7 +22,7 @@ public class MainGUI extends JFrame {
         super("Main GUI");
         this.setSize(5 * SCALE, 3 * SCALE);
         this.setUndecorated(true);
-        this.setVisible(true);
+        this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
@@ -46,7 +46,7 @@ public class MainGUI extends JFrame {
 
     @Nonnull
     public MainGUI setup() {
-//        PluginBus.getInstance().fireEvent(new Packet99(PluginBus.getInstance().plugins));
+        this.setVisible(true);
         return this;
     }
 
