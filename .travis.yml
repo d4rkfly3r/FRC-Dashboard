@@ -25,6 +25,13 @@ before_deploy:
   - rvm 1.9.3 do gem install mime-types -v 2.6.2
   - for f in "./build/libs/FRC-Dashboard-Server*SNAPSHOT.jar"; do mv ${f} "./build/libs/FRC-Dashboard-Server-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-SNAPSHOT.jar"; done
 
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
 deploy:
   file_glob: true
   provider: releases
