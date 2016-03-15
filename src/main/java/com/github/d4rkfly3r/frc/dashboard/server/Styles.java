@@ -22,9 +22,13 @@ public class Styles {
 
     static {
         Gson gson = new Gson();
+
         try {
-            new File("style.json").createNewFile();
-            fStyles = gson.fromJson(new FileReader(new File("style.json")), Styles.class).styles;
+            File file = new File("style.json");
+            if (!file.exists()) {
+                System.out.println("File Missing! Created: " + file.createNewFile());
+            }
+            fStyles = gson.fromJson(new FileReader(file), Styles.class).styles;
         } catch (IOException e) {
             e.printStackTrace();
         }

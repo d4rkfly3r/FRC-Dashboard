@@ -30,7 +30,9 @@ import com.github.d4rkfly3r.frc.dashboard.api.util.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.net.JarURLConnection;
@@ -58,6 +60,28 @@ public class ClassFinder {
         add(Plugin.class);
         add(Module.class);
     }};
+
+    static {
+        try {
+            File file = new File("annotations.frc");
+            if (!file.exists()) {
+                System.out.println("File Missing! Created: " + file.createNewFile());
+            }
+
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                for (String line; (line = br.readLine()) != null; ) {
+                    try {
+                        annotationList.add((Class<? extends Annotation>) Class.forName(line));
+                        System.out.println("Annotation added to search!");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private static ArrayList<Class<?>> subClasses = findSubclasses(getClasspathLocations());
 
