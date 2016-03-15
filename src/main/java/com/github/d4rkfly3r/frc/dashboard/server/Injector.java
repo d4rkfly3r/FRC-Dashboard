@@ -38,7 +38,7 @@ import java.util.List;
  * Created by d4rkfly3r on 3/13/2016.
  * Project: FRC-Dashboard-Server
  */
-class Injector {
+public class Injector {
     private Logger logger = new Logger(Injector.class);
 
     private static Injector ourInstance = new Injector();

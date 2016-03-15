@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * Created by d4rkfly3r on 3/13/2016.
  * Project: FRC-Dashboard-Server
  */
-class ClassFinder {
+public class ClassFinder {
 
     private static Logger logger = new Logger(ClassFinder.class);
     private static ArrayList<String> excludedLocations = new ArrayList<String>() {{
