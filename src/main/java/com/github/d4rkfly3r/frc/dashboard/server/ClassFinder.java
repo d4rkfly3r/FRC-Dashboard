@@ -50,6 +50,7 @@ import java.util.stream.Collectors;
 public class ClassFinder {
 
     private static Logger logger = new Logger(ClassFinder.class);
+
     private static ArrayList<String> excludedLocations = new ArrayList<String>() {{
         add("/jre/lib/");
         add("idea_rt.jar");
@@ -86,7 +87,7 @@ public class ClassFinder {
     private static ArrayList<Class<?>> subClasses = findSubclasses(getClasspathLocations());
 
     @Nonnull
-    static List<Class<?>> getClasses(Class<? extends Annotation> annotationClass) {
+    public static List<Class<?>> getClasses(Class<? extends Annotation> annotationClass) {
         return subClasses.parallelStream().filter(aClass -> aClass.isAnnotationPresent(annotationClass)).collect(Collectors.toList());
     }
 

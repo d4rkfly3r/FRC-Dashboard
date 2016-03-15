@@ -1,3 +1,27 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2016. Joshua Freedman
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.github.d4rkfly3r.frc.dashboard.server.modules;
 
 import com.github.d4rkfly3r.frc.dashboard.api.Module;
@@ -16,12 +40,12 @@ public class HorizontalProgressModule extends JProgressBar {
     private static final String DISABLED_PERCENT_STRING = " --- ";
 
 
-    private Color progressBarColor = new Color(Integer.decode(Styles.getOrDef("horizontalPB|color", 0x1869A6)));
-    private Color gradientEndingColor = new Color(Integer.decode(Styles.getOrDef("horizontalPB|gradientEndColor", 0xc0c0c0)));
-    private Color borderColor = new Color(Integer.decode(Styles.getOrDef("horizontalPB|borderColor", 0x736a60)));
-    private Color disabledBorderColor = new Color(Integer.decode(Styles.getOrDef("horizontalPB|disabledBorderColor", 0xbebebe)));
-    private Color progressTextColor = new Color(Integer.decode(Styles.getOrDef("horizontalPB|textColor", 0x000000)));
-    private Font progressTextFont = new Font(Styles.getOrDef("horizontalPB|fontName", "Arial"), Integer.decode(Styles.getOrDef("horizontalPB|fontStyle", Font.PLAIN)), Integer.decode(Styles.getOrDef("horizontalPB|fontSize", 20)));
+    private Color progressBarColor = new Color(Integer.decode(Styles.getOrDefault("horizontalPB|color", 0x1869A6)));
+    private Color gradientEndingColor = new Color(Integer.decode(Styles.getOrDefault("horizontalPB|gradientEndColor", 0xc0c0c0)));
+    private Color borderColor = new Color(Integer.decode(Styles.getOrDefault("horizontalPB|borderColor", 0x736a60)));
+    private Color disabledBorderColor = new Color(Integer.decode(Styles.getOrDefault("horizontalPB|disabledBorderColor", 0xbebebe)));
+    private Color progressTextColor = new Color(Integer.decode(Styles.getOrDefault("horizontalPB|textColor", 0x000000)));
+    private Font progressTextFont = new Font(Styles.getOrDefault("horizontalPB|fontName", "Arial"), Integer.decode(Styles.getOrDefault("horizontalPB|fontStyle", Font.PLAIN)), Integer.decode(Styles.getOrDefault("horizontalPB|fontSize", 20)));
 
     private boolean percentStringVisible = true;
     private boolean progressCenterText = true;
@@ -102,7 +126,7 @@ public class HorizontalProgressModule extends JProgressBar {
         int total = max - min;
         float dx = (float) (w - 2) / (float) total;
         int value = getValue();
-        int progress = 0;
+        int progress;
         if (value == max) {
             progress = w - 1;
         } else {
@@ -155,7 +179,6 @@ public class HorizontalProgressModule extends JProgressBar {
                     g2d.drawString(DISABLED_PERCENT_STRING, w - stringW, stringH);
                 }
             }
-            w -= (stringW + PREFERRED_PERCENT_STRING_MARGIN_WIDTH);
         }
     }
 
