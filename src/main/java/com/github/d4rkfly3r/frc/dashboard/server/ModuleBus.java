@@ -24,6 +24,7 @@
 
 package com.github.d4rkfly3r.frc.dashboard.server;
 
+import com.github.d4rkfly3r.frc.dashboard.api.Module;
 import com.github.d4rkfly3r.frc.dashboard.api.util.Logger;
 
 import java.lang.reflect.Constructor;
@@ -50,7 +51,7 @@ public class ModuleBus {
     }
 
     public void init() {
-        ClassFinder.getModuleClasses().forEach(aClass1 -> {
+        ClassFinder.getClasses(Module.class).forEach(aClass1 -> {
             try {
                 for (Constructor<?> constructor : aClass1.getConstructors()) {
                     constructor.setAccessible(true);

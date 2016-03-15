@@ -32,6 +32,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -53,23 +54,25 @@ public class ClassFinder {
         add("xalan-2.6.0.jar");
     }};
 
+    private static ArrayList<Class<? extends Annotation>> annotationList = new ArrayList<Class<? extends Annotation>>() {{
+        add(Plugin.class);
+        add(Module.class);
+    }};
+
+    private static ArrayList<Class<?>> subClasses = findSubclasses(getClasspathLocations());
+
     @Nonnull
-    static Vector<Class<?>> getPluginClasses() {
-        return findSubclasses(Plugin.class, getClasspathLocations());
+    static List<Class<?>> getClasses(Class<? extends Annotation> annotationClass) {
+        return subClasses.parallelStream().filter(aClass -> aClass.isAnnotationPresent(annotationClass)).collect(Collectors.toList());
     }
 
     @Nonnull
-    static Vector<Class<?>> getModuleClasses() {
-        return findSubclasses(Module.class, getClasspathLocations());
-    }
-
-    @Nonnull
-    private static Vector<Class<?>> findSubclasses(@Nonnull Class<?> annotationClass, @Nonnull Map<URL, String> locations) {
-        Vector<Class<?>> v = new Vector<>();
-        Vector<Class<?>> w;
+    private static ArrayList<Class<?>> findSubclasses(@Nonnull Map<URL, String> locations) {
+        ArrayList<Class<?>> v = new ArrayList<>();
+        ArrayList<Class<?>> w;
 
         for (URL url : locations.keySet()) {
-            w = findSubclasses(url, locations.get(url), annotationClass);
+            w = findSubclasses(url, locations.get(url));
             if ((w.size() > 0)) v.addAll(w);
         }
 
@@ -77,22 +80,19 @@ public class ClassFinder {
     }
 
     @Nonnull
-    private static Vector<Class<?>> findSubclasses(@Nonnull URL location, @Nonnull String packageName, @Nonnull Class<?> annotationClass) {
+    private static ArrayList<Class<?>> findSubclasses(@Nonnull URL location, @Nonnull String packageName) {
 
         if (location.getFile().contains("/jre/lib/") || location.getFile().contains("idea_rt.jar") || location.getFile().contains("xalan-2.6.0.jar"))
-            return new Vector<>();
+            return new ArrayList<>();
 
         for (String excludedLocation : excludedLocations) {
             if (location.getFile().contains(excludedLocation)) {
-                return new Vector<>();
+                return new ArrayList<>();
             }
         }
 
         Map<Class<?>, URL> thisResult = new TreeMap<>((c1, c2) -> String.valueOf(c1).compareTo(String.valueOf(c2)));
-        Vector<Class<?>> v = new Vector<>();
-
-        // TODO: double-check for null search class
-        String fqcn = annotationClass.getName();
+        ArrayList<Class<?>> v = new ArrayList<>();
 
         List<URL> knownLocations = new ArrayList<>();
         knownLocations.add(location);
@@ -108,9 +108,11 @@ public class ClassFinder {
                         String classname = file.substring(0, file.length() - 6);
                         try {
                             Class c = Class.forName(packageName + "." + classname);
-                            if (c.isAnnotationPresent(annotationClass) && !fqcn.equals(packageName + "." + classname)) {
-                                thisResult.put(c, url);
-                            }
+                            annotationList.forEach(aLC -> {
+                                if (c.isAnnotationPresent(aLC)) {
+                                    thisResult.put(c, url);
+                                }
+                            });
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -134,12 +136,12 @@ public class ClassFinder {
                             classname = classname.replace('/', '.');
 
                             try {
-                                // TODO: verify this block
                                 Class c = Class.forName(classname);
-
-                                if (c.isAnnotationPresent(annotationClass) && !fqcn.equals(classname)) {
-                                    thisResult.put(c, url);
-                                }
+                                annotationList.forEach(aLC -> {
+                                    if (c.isAnnotationPresent(aLC)) {
+                                        thisResult.put(c, url);
+                                    }
+                                });
                             } catch (Error | Exception ignored) {
                             }
                         }

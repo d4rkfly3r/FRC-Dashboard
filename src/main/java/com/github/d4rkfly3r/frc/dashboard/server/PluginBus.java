@@ -25,6 +25,7 @@
 package com.github.d4rkfly3r.frc.dashboard.server;
 
 import com.github.d4rkfly3r.frc.dashboard.api.Listener;
+import com.github.d4rkfly3r.frc.dashboard.api.Plugin;
 import com.github.d4rkfly3r.frc.dashboard.api.events.Event;
 import com.github.d4rkfly3r.frc.dashboard.api.events.PluginPreInitEvent;
 import com.github.d4rkfly3r.frc.dashboard.api.util.Logger;
@@ -92,7 +93,7 @@ public class PluginBus {
     }
 
     public void init() {
-        ClassFinder.getPluginClasses().forEach(aClass1 -> {
+        ClassFinder.getClasses(Plugin.class).forEach(aClass1 -> {
             try {
                 plugins.put(aClass1, aClass1.newInstance());
             } catch (InstantiationException | IllegalAccessException e) {
