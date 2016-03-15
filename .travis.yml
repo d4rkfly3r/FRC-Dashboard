@@ -1,0 +1,29 @@
+sudo: required
+dist: trusty
+
+before_install:
+ - chmod +x gradlew
+
+language: java
+jdk:
+- oraclejdk8
+- openjdk8
+
+env: GRADLE_OPTS="-Xms1g -Xmx3g"
+script: gradle build
+
+notifications:
+  email: false
+
+before_deploy:
+  - rvm 1.9.3 do gem install mime-types -v 2.6.2
+  - for f in "./build/libs/FRC-Dashboard-Server*SNAPSHOT.jar"; do mv ${f} "./build/libs/FRC-Dashboard-Server-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-SNAPSHOT.jar"; done
+
+deploy:
+  file_glob: true
+  provider: releases
+  api-key: ${KEY}
+  file: "./build/libs/FRC-Dashboard-Server*.jar"
+  skip_cleanup: true
+  on:
+    tags: true
