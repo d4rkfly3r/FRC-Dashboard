@@ -9,6 +9,11 @@ jdk:
 - oraclejdk8
 - openjdk8
 
+git:
+  submodules: false
+
+before_install: git submodule update --init --recursive
+
 env: GRADLE_OPTS="-Xms1g -Xmx3g"
 script: gradle build
 
