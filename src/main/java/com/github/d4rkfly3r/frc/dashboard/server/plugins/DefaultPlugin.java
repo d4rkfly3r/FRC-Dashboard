@@ -9,6 +9,8 @@ import com.github.d4rkfly3r.frc.dashboard.api.util.Logger;
 import com.github.d4rkfly3r.frc.dashboard.server.MainGUI;
 import com.github.d4rkfly3r.frc.dashboard.server.modules.HorizontalProgressModule;
 
+import javax.swing.*;
+
 /**
  * Created by Joshua on 3/14/2016.
  * Project: FRC-Dashboard-Server
@@ -19,6 +21,8 @@ public class DefaultPlugin {
     @Inject
     HorizontalProgressModule horizontalProgressModule;
 
+    JProgressBar jProgressBar = new JProgressBar();
+
     @Inject
     Logger logger;
 
@@ -28,15 +32,25 @@ public class DefaultPlugin {
     @Listener
     public void onInit(PluginInitEvent event) {
         DragListener dragListener = new DragListener();
-        horizontalProgressModule.addMouseMotionListener(dragListener);
         horizontalProgressModule.addMouseListener(dragListener);
+        horizontalProgressModule.addMouseMotionListener(dragListener);
         horizontalProgressModule.addMouseWheelListener(e -> horizontalProgressModule.setValue(horizontalProgressModule.getValue() + (e.getWheelRotation())));
-
-        logger.debug("Success");
-        horizontalProgressModule.setLocation(5, 5);
+        horizontalProgressModule.setLocation(50, 50);
         mainGUI.add(horizontalProgressModule);
         horizontalProgressModule.repaint();
 
-    }
+        new Thread(() -> {
+            while (true) {
+                int nVal = horizontalProgressModule.getValue() + 1;
+                nVal = nVal > 100 ? 0 : nVal;
+                horizontalProgressModule.setValue(nVal);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
+    }
 }

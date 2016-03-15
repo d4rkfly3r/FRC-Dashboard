@@ -15,16 +15,13 @@ public class HorizontalProgressModule extends JProgressBar {
 
     private static final String DISABLED_PERCENT_STRING = " --- ";
 
-    {
-        System.out.println(Styles.getOrDef(".lols|color2", 0x1869A6));
-    }
 
-    private Color progressBarColor = new Color(Integer.decode(Styles.getOrDef(".lols|color", 0x1869A6)));
-    private Color gradientEndingColor = new Color(0xc0c0c0);
-    private Color borderColor = new Color(0x736a60);
-    private Color disabledBorderColor = new Color(0xbebebe);
-    private Color progressTextColor = new Color(0x000000);
-    private Font progressTextFont = new Font("Arial", Font.PLAIN, 20);
+    private Color progressBarColor = new Color(Integer.decode(Styles.getOrDef("horizontalPB|color", 0x1869A6)));
+    private Color gradientEndingColor = new Color(Integer.decode(Styles.getOrDef("horizontalPB|gradientEndColor", 0xc0c0c0)));
+    private Color borderColor = new Color(Integer.decode(Styles.getOrDef("horizontalPB|borderColor", 0x736a60)));
+    private Color disabledBorderColor = new Color(Integer.decode(Styles.getOrDef("horizontalPB|disabledBorderColor", 0xbebebe)));
+    private Color progressTextColor = new Color(Integer.decode(Styles.getOrDef("horizontalPB|textColor", 0x000000)));
+    private Font progressTextFont = new Font(Styles.getOrDef("horizontalPB|fontName", "Arial"), Integer.decode(Styles.getOrDef("horizontalPB|fontStyle", Font.PLAIN)), Integer.decode(Styles.getOrDef("horizontalPB|fontSize", 20)));
 
     private boolean percentStringVisible = true;
     private boolean progressCenterText = true;
@@ -53,8 +50,12 @@ public class HorizontalProgressModule extends JProgressBar {
     private String maxPercentString;
 
     public HorizontalProgressModule() {
+        Dimension dimension = new Dimension(300, 50);
         setDisplaySize(300, 50);
-        setSize(300, 50);
+        setPreferredSize(dimension);
+        setSize(dimension);
+        setMaximumSize(dimension);
+        setMinimumSize(dimension);
         setMinimum(0);
         setMaximum(100);
         setValue(40);
@@ -115,6 +116,9 @@ public class HorizontalProgressModule extends JProgressBar {
         g2d.setColor(progressBarColor);
         g2d.fillRect(1, 1, progress, h - 1);
 
+        g2d.setColor(progressTextColor);
+        g2d.setFont(progressTextFont);
+
         if (percentStringVisible) {
             FontMetrics fm = g.getFontMetrics();
             int stringW;
@@ -123,6 +127,12 @@ public class HorizontalProgressModule extends JProgressBar {
             if (isEnabled()) {
                 int p = getValue();
                 String percent = Integer.toString(p, 10) + "%";
+                if (p < 10) {
+                    percent = " " + percent;
+                }
+                if (p < 100) {
+                    percent = " " + percent;
+                }
 
                 if (maxPercentString == null) {
                     maxPercentString = Integer.toString(getMaximum(), 10) + "%";
@@ -130,8 +140,6 @@ public class HorizontalProgressModule extends JProgressBar {
                 stringW = fm.stringWidth(maxPercentString);
                 stringH = ((h - fm.getHeight()) / 2) + fm.getAscent();
 
-                g2d.setColor(progressTextColor);
-                g2d.setFont(progressTextFont);
                 if (progressCenterText) {
                     g2d.drawString(percent, (w / 2) - (stringW / 2), stringH);
                 } else {
@@ -141,8 +149,6 @@ public class HorizontalProgressModule extends JProgressBar {
                 stringW = fm.stringWidth(DISABLED_PERCENT_STRING);
                 stringH = ((h - fm.getHeight()) / 2) + fm.getAscent();
 
-                g2d.setColor(progressTextColor);
-                g2d.setFont(progressTextFont);
                 if (progressCenterText) {
                     g2d.drawString(DISABLED_PERCENT_STRING, (w / 2) - (stringW / 2), stringH);
                 } else {
